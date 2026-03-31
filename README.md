@@ -2,7 +2,7 @@
 
 Quick IOC detection scripts for active security incidents.
 
-Built for IT professionals and security teams who need fast, no-frills checks.
+Built for IT professionals and security teams who need fast, no-frills checks without waiting for vendor tooling to catch up.
 
 ---
 

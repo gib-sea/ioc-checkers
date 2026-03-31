@@ -19,13 +19,23 @@ Safe versions: `axios@1.14.0` (1.x users) or `axios@0.30.3` (0.x users)
 
 ### What the scripts check
 
-- Platform-specific RAT artifact
-  - Windows: `%PROGRAMDATA%\wt.exe`
+- Platform-specific RAT artifacts
+  - Windows: `%PROGRAMDATA%\wt.exe`, `%TEMP%\6202033.vbs`, `%TEMP%\6202033.ps1`
   - macOS: `/Library/Caches/com.apple.act.mond`
   - Linux: `/tmp/ld.py`
+- Shell profile files for persistence (`~/.bashrc`, `~/.zshrc`, `~/.bash_profile`)
 - Presence of `plain-crypto-js` in node_modules
-- Compromised axios versions in package-lock.json files
-- Active network connections to known C2 domain `sfrclak.com`
+- Compromised axios versions in `package-lock.json` and `yarn.lock` files
+- Active network connections to known C2: `sfrclak.com` / `142.11.206.73` port 8000
+- Known malicious file hashes (SHA1) in npm cache
+
+### Known malicious hashes
+
+| Package | SHA1 |
+|---|---|
+| axios@1.14.1 | `2553649f232204966871cea80a5d0d6adc700ca` |
+| axios@0.30.4 | `d6f3f62fd3b9f5432f5782b62d8cfd5247d5ee71` |
+| plain-crypto-js@4.2.1 | `07d889e2dadce6f3910dcbc253317d28ca61c766` |
 
 ---
 
@@ -49,18 +59,20 @@ Output is either `YOU'VE BEEN PWNED` with findings and immediate action steps, o
 ### If you find IOCs
 
 1. Isolate the machine from the network immediately
-2. Do not attempt to clean in place - rebuild from a known-good backup taken before March 30, 2026
-3. Rotate all credentials accessible from the compromised machine - npm tokens, AWS keys, SSH keys, cloud credentials, and any values in .env files
-4. Review cloud and code repository access logs for unauthorized activity
-5. Report to your security team
+2. Block C2 at your firewall: `sfrclak.com` and `142.11.206.73` port 8000
+3. Do not attempt to clean in place - rebuild from a known-good backup taken before March 30, 2026
+4. Rotate all credentials: npm tokens, AWS/Azure/GCP keys, SSH keys, database credentials, CI/CD secrets, and any values in .env files
+5. Review cloud and code repository access logs for unauthorized activity
+6. Check CI/CD runners and build infrastructure - not just developer workstations
+7. Report to your security team
 
 ---
 
 ### References
 
+- [SANS - Axios npm Supply Chain Compromise](https://www.sans.org/blog/axios-npm-supply-chain-compromise-malicious-packages-remote-access-trojan)
 - [StepSecurity - Axios Compromised on npm](https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan)
 - [Help Net Security - Axios npm packages backdoored](https://www.helpnetsecurity.com/2026/03/31/axios-npm-backdoored-supply-chain-attack/)
-- [The Hacker News - Axios Supply Chain Attack](https://thehackernews.com/2026/03/axios-supply-chain-attack-pushes-cross.html)
 
 ---
 
@@ -70,5 +82,5 @@ These scripts are provided as-is for informational and detection purposes. They 
 
 ---
 
-*Scripts by Sean Gibson | github.com/gib-sea*
+*Scripts by Sean Gibson | github.com/gib-sea*  
 *CompTIA Security+ | Pursuing CySA+ and SC-200*
